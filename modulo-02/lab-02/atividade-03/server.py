@@ -26,14 +26,16 @@ sock = socket.socket()
 sock.bind((HOST, PORTA))
 sock.listen(1)
 
-#estabelecimento da conexão
-new_sock, address = sock.accept()
-
+#faz nosso servidor entrar em loop infinito 
 while True:
-    msg = new_sock.recv(1024) #recebe a mensagem
-    if not msg: #sai do loop quando o cliente para de enviar mensagens
-        break
-    msg = loads(msg) #passa a mensagem de uma sequencia de bytes para um objeto (dicionario)
-    new_sock.send(str(word_counter(msg['file_name'], msg['word'])).encode('utf-8')) #chama a função de contagem de palavras e envia a resposta no formato de série de bytes
+    #estabelecimento da conexão
+    new_sock, address = sock.accept()
 
-new_sock.close() #encerra o socket
+    while True:
+        msg = new_sock.recv(1024) #recebe a mensagem
+        if not msg: #sai do loop quando o cliente para de enviar mensagens
+            break
+        msg = loads(msg) #passa a mensagem de uma sequencia de bytes para um objeto (dicionario)
+        new_sock.send(str(word_counter(msg['file_name'], msg['word'])).encode('utf-8')) #chama a função de contagem de palavras e envia a resposta no formato de série de bytes
+
+    new_sock.close() #encerra o socket
